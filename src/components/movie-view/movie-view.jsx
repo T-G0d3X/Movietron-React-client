@@ -1,5 +1,6 @@
 import React from 'react';
 import { MainView } from '../main-view/main-view';
+import BtnPress from '../buttonClick';
 
 export class MovieView extends React.Component {
   constructor() {
@@ -8,16 +9,12 @@ export class MovieView extends React.Component {
     this.state = {};
   }
 
-  onBtnClick() {
-    window.location.reload();
-  }
-
   render() {
-    const {movie} = this.props;
+    const { movie } = this.props;
 
     if (!movie) return null;
 
-    return(
+    return (
       <div className="movie-view">
         <img className="movie-poster" src={movie.ImagePath} />
         <div className="movie-title">
@@ -37,9 +34,8 @@ export class MovieView extends React.Component {
           <span className="label">Director: </span>
           <span className="value">{movie.Director.Name}</span>
         </div>
-        <button onClick={this.onBtnClick}>Back</button>
-       </div>
+        <button>{<BtnPress />}</button>
+      </div>
     );
   }
 }
-

@@ -1,3 +1,4 @@
+// Low level REUSABLE COMPONENT- have a small well defined concern
 import React from 'react';
 
 export class MovieCard extends React.Component {
