@@ -1,6 +1,5 @@
 import React from 'react';
 import { MainView } from '../main-view/main-view';
-import BtnPress from '../buttonClick';
 
 export class MovieView extends React.Component {
   constructor() {
@@ -10,7 +9,7 @@ export class MovieView extends React.Component {
   }
 
   render() {
-    const { movie } = this.props;
+    const { movie, onBackClick } = this.props;
 
     if (!movie) return null;
 
@@ -34,7 +33,7 @@ export class MovieView extends React.Component {
           <span className="label">Director: </span>
           <span className="value">{movie.Director.Name}</span>
         </div>
-        <button>{<BtnPress />}</button>
+        <button onClick={onBackClick}>Go back to the list</button>
       </div>
     );
   }
