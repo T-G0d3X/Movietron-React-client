@@ -16,8 +16,10 @@ export function LoginView(props) {
 
   return (
     <Form className="form-login">
-      <h1 className="text-primarys">Almost in Movietron</h1>
-      <p className="mb-5">Login fast, and get movies even faster</p>
+      <h1 style={{ color: 'skyblue' }} className="text-primarys">
+        Almost in Movietron
+      </h1>
+      <p className="mb-5">Login please</p>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Username</Form.Label>
         <Form.Control

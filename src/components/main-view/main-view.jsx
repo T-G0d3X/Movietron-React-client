@@ -11,7 +11,6 @@ import {
   FormControl,
   Container,
 } from 'react-bootstrap';
-import {} from 'react-bootstrap';
 
 import { LoginView } from '../login-view/login-view';
 import { RegisterView } from '../registration-view/registration-view';
@@ -86,22 +85,11 @@ export class MainView extends React.Component {
 
     return (
       <React.Fragment>
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <Nav class="navbar navbar-expand-lg navbar-light">
           <div class="container-fluid">
             <a class="navbar-brand" href="#">
               Movietron
             </a>
-            {/* <button
-              class="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button> */}
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
                 <li class="nav-item">
@@ -127,8 +115,8 @@ export class MainView extends React.Component {
               </ul>
             </div>
           </div>
-        </nav>
-        <div className="main-view row row-cols-5">
+        </Nav>
+        <div style={{ justifyContent: 'center' }} className="main-view row">
           {selectedMovie ? (
             <MovieView
               movie={selectedMovie}

@@ -18,7 +18,7 @@ export class MovieView extends React.Component {
 
     return (
       <div className="movie-view">
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '18rem', border: 'solid 1px skyblue' }}>
           <Card.Img
             className="movie-poster"
             variant="top"

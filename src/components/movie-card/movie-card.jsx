@@ -11,15 +11,31 @@ export class MovieCard extends React.Component {
     const { movie, onMovieClick } = this.props;
 
     return (
-      <Card style={{ width: '16rem' }} className="card-deck">
-        <Card.Img variant="top" src={movie.ImagePath} />
-        <Card.Body>
-          <Card.Title>{movie.Title}</Card.Title>
-          <Card.Text>{movie.Description}</Card.Text>
-          <Button onClick={() => onMovieClick(movie)} variant="primary">
-            Open
-          </Button>
+      <Card
+        style={{
+          width: '16rem',
+          marginRight: '25px',
+          justifyContent: 'center',
+          border: 'solid 1px skyblue',
+        }}
+        className="card-deck "
+      >
+        <Card.Img
+          style={{ height: '380px' }}
+          className="card-img-top"
+          src={movie.ImagePath}
+        />
+        <Card.Body style={{ height: '230px' }}>
+          <Card.Title className="center">{movie.Title}</Card.Title>
+          <Card.Text style={{ height: '130px' }}>{movie.Description}</Card.Text>
         </Card.Body>
+        <Button
+          style={{ marginBottom: '15px' }}
+          onClick={() => onMovieClick(movie)}
+          variant="primary btn-sm"
+        >
+          Open
+        </Button>
       </Card>
     );
   }
