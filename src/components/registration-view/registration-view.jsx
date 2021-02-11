@@ -2,24 +2,41 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'react-bootstrap';
 import '../registration-view/registration-view.scss';
+import axios from 'axios';
+
+import { Link } from 'react-router-dom';
+//////////////////////////////////////////////////////////////////////
 
 export function RegisterView(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState('');
+  //////////////////////////////////////////////////////////////////////
 
-  const handleSubmit = (e) => {
+  const handleRegister = (e) => {
     e.preventDefault();
     console.log(username, password, email, birthday);
-    props.onRegister(username);
+    axios
+      .post('https://movietron-09120.herokuapp.com/users', {
+        Username: username,
+        Password: password,
+        Email: email,
+        Birthday: birthday,
+      })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        window.open('/', '_self'); // _self so the page opens in current tab
+      })
+      .catch((e) => {
+        console.log('error registering the user');
+      });
   };
 
+  ////////////////////////////////////////////////////////////////
   return (
-    <Form>
-      <h1 className="alert-primary shadow text-uppercase align-middle">
-        Welcome to Movietron, best movie app!
-      </h1>
+    <Form style={{ marginTop: '50px' }}>
       <p>Register for nice list of movies</p>
 
       <Form.Group controlId="formBasicText">
@@ -61,13 +78,18 @@ export function RegisterView(props) {
           type="date"
           value={birthday}
           onChange={(e) => setBirthday(e.target.value)}
-          placeholder="Enter Birthzddaay"
+          placeholder="Enter Birthday"
         ></Form.Control>
       </Form.Group>
 
-      <Button onClick={handleSubmit} variant="primary" type="submit">
+      <Button onClick={handleRegister} variant="primary" type="submit">
         Submit
       </Button>
+      <Link to="/">
+        <Button type="submit" variant="primary" style={{ marginLeft: '10px' }}>
+          Already have an account?
+        </Button>
+      </Link>
     </Form>
   );
 }
@@ -77,7 +99,7 @@ RegisterView.propTypes = {
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
-    birthday: PropTypes.string.isRequired,
   }),
-  onRegister: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
+  onChange: PropTypes.func,
 };
