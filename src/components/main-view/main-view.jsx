@@ -1,39 +1,58 @@
 // HIGH-LEVEL component - SUPERVISE OTHER components
 import React from 'react';
 import axios from 'axios';
-
-import {
-  Navbar,
-  Nav,
-  Row,
-  Col,
-  Form,
-  FormControl,
-  Container,
-} from 'react-bootstrap';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Nav from 'react-bootstrap/Nav';
+import './main-view.scss';
 
 import { LoginView } from '../login-view/login-view';
 import { RegisterView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { DirectorView } from '../director-view/director-view';
+import { GenreView } from '../genre-view/genre-view';
+import { ProfileView } from '../profile-view/profile-view';
+import { ProfileUpdate } from '../update-view/update-view';
 
-import './main-view.scss';
+//////////////////////////////////////////////////////////////////////
 
 export class MainView extends React.Component {
   constructor() {
     super();
     // initial state is set to null
     this.state = {
-      movies: null,
-      selectedMovie: null,
+      movies: [],
       user: null,
-      register: null,
     };
   }
-
+  //////////////////////////////////////////////////////////////////////
   componentDidMount() {
+    let accessToken = localStorage.getItem('token');
+    if (accessToken !== null) {
+      this.setState({
+        user: localStorage.getItem('user'),
+      });
+      this.getMovies(accessToken);
+    }
+  }
+
+  onLoggedIn(authData) {
+    console.log(authData);
+    this.setState({
+      user: authData.user.Username,
+    });
+
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.Username);
+    this.getMovies(authData.token);
+  }
+
+  getMovies(token) {
     axios
-      .get('https://movietron-09120.herokuapp.com/movies')
+      .get('https://movietron-09120.herokuapp.com/movies', {
+        //  passing bearer authorization in the header of your HTTP requests, you can make authenticated requests to your API
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         this.setState({
           movies: response.data,
@@ -44,95 +63,120 @@ export class MainView extends React.Component {
       });
   }
 
-  // When a movie is clicked, function is invoked and updates the state of the 'selectedMovie'
-  onMovieClick(movie) {
+  onSignOut() {
+    localStorage.clear();
     this.setState({
-      selectedMovie: movie,
-    });
-  }
-
-  onLoggedIn(user) {
-    this.setState({
-      user,
-    });
-  }
-
-  onRegister(register) {
-    this.setState({
-      register,
-    });
-  }
-
-  onBackClick() {
-    this.setState({
-      selectedMovie: null,
+      user: null,
     });
   }
 
   render() {
-    const { movies, selectedMovie, user, register } = this.state;
-
-    if (!register)
-      return (
-        <RegisterView onRegister={(register) => this.onRegister(register)} />
-      );
-
-    if (!user)
-      return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
+    const { movies, user } = this.state;
+    const { movie } = this.props;
 
     // Before the movies loaded
     if (!movies) return <div className="main-view" />;
 
+    //////////////////////////////////////////////////////////////////////////
     return (
-      <React.Fragment>
-        <Nav class="navbar navbar-expand-lg navbar-light">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-              Movietron
-            </a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">
-                    List of movies
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Directors
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Actors
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    Genres
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+      <Router>
+        <Nav as="ul">
+          <Nav.Item as="li">
+            <Nav.Link
+              href="/"
+              style={{
+                fontSize: '2em',
+                color: 'darkblue',
+                fontWeight: 'bold',
+                fontFamily: 'Franklin Gothic Medium',
+                letterSpacing: '13px',
+              }}
+            >
+              MOVIETRON
+            </Nav.Link>
+            <Nav.Link
+              style={{ display: 'inline' }}
+              href="/users/userId"
+              eventKey="link-1"
+            >
+              <h5 style={{ display: 'inline' }}>My Profile</h5>
+            </Nav.Link>
+            <Nav.Link style={{ display: 'inline' }}>
+              <h5
+                onClick={(user) => this.onSignOut(user)}
+                style={{ display: 'inline', marginLeft: '80px' }}
+              >
+                Log out
+              </h5>
+            </Nav.Link>
+          </Nav.Item>
         </Nav>
         <div style={{ justifyContent: 'center' }} className="main-view row">
-          {selectedMovie ? (
-            <MovieView
-              movie={selectedMovie}
-              onBackClick={() => this.onBackClick()}
-            />
-          ) : (
-            movies.map((movie) => (
-              <MovieCard
-                key={movie._id}
-                movie={movie}
-                onMovieClick={(movie) => this.onMovieClick(movie)}
+          <Route
+            exact
+            path="/"
+            render={() => {
+              if (!user)
+                return (
+                  <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                );
+
+              return movies.map((m) => <MovieCard key={m._id} movie={m} />);
+            }}
+          />
+          <Route
+            path="/movies/:movieId"
+            render={({ match }) => (
+              <MovieView
+                movie={movies.find(
+                  (movie) => movie._id === match.params.movieId
+                )}
               />
-            ))
-          )}
+            )}
+          />
+          <Route path="/register" render={() => <RegisterView />} />
+          <Route
+            path="/directors/:name"
+            render={({ match }) => {
+              if (!movies) return <div className="main-view" />;
+              return (
+                <DirectorView
+                  director={movies.find(
+                    (movie) => movie.Director.Name === match.params.name
+                  )}
+                  movies={movies}
+                />
+              );
+            }}
+          />
+          <Route
+            path="/genres/:name"
+            render={({ match }) => {
+              if (!movies) return <div className="main-view" />;
+              return (
+                <GenreView
+                  genre={movies.find(
+                    (movie) => movie.Genre.Name === match.params.name
+                  )}
+                  movies={movies}
+                />
+              );
+            }}
+          />
+          <Route
+            path="/users/:userId"
+            render={() => {
+              return <ProfileView movies={movies} movie={movie} />;
+            }}
+          />
+          <Route
+            path="/update/:userId"
+            render={() => {
+              return <ProfileUpdate />;
+            }}
+          />
         </div>
-      </React.Fragment>
+      </Router>
     );
   }
 }
