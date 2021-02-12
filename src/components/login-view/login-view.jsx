@@ -1,25 +1,43 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
-import './login-view.scss';
+import { Link } from 'react-router-dom';
+////////////////////////////////////////////////////////////////////////
 
 export function LoginView(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  ////////////////////////////////////////////////////////////////////////
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(username, password);
-    props.onLoggedIn(username);
+
+    axios
+      .post('https://movietron-09120.herokuapp.com/login', {
+        Username: username,
+        Password: password,
+      })
+      .then((response) => {
+        const data = response.data;
+        props.onLoggedIn(data);
+      })
+      .catch((e) => {
+        console.log('no such user');
+      });
   };
 
+  /////////////////////////////////////////////////////////////////////////
   return (
-    <Form className="form-login">
-      <h1 style={{ color: 'skyblue' }} className="text-primarys">
-        Almost in Movietron
-      </h1>
-      <p className="mb-5">Login please</p>
+    <Form
+      className="form-login"
+      style={{
+        marginTop: '60px',
+        border: '1px solid skyblue',
+        padding: '20px',
+      }}
+    >
+      <p>Login please</p>
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Username</Form.Label>
         <Form.Control
@@ -38,18 +56,21 @@ export function LoginView(props) {
           placeholder="Enter Password"
         />
       </Form.Group>
-
       <Button onClick={handleSubmit} variant="primary" type="submit">
-        Submit
+        Sign in
       </Button>
+      <Link to="/register">
+        <Button type="submit" style={{ marginLeft: '10px' }}>
+          Just arrived? Register first!
+        </Button>
+      </Link>
     </Form>
   );
 }
 
 LoginView.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-  }),
-  onLoggedIn: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
 };
+
+  
