@@ -132,3 +132,4 @@ RegisterView.propTypes = {
   }),
   onRegister: propTypes.func,
 };
+

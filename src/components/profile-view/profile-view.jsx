@@ -190,3 +190,4 @@ ProfileView.propTypes = {
     Birthday: propTypes.instanceOf(Date),
   }),
 };
+
