@@ -1,0 +1,31 @@
+.profileImg {
+  @media (max-width: 768px) {
+    display: flex;
+    align-items: center;
+    margin-left: 0px;
+  }
+
+  @media (max-width: 500px) {
+    display: flex;
+    align-items: center;
+  }
+
+  @media (max-width: 350px) {
+    font-size: 15px;
+  }
+}
+
+.profileBtn {
+  @media (max-width: 768px) {
+    height: 50%;
+  }
+}
+
+.profileCardBody {
+  @media (max-width: 768px) {
+    margin-left: 0px;
+  }
+  @media (min-width: 768px) {
+    margin-left: 130px;
+  }
+}

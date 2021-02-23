@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row';
 import { Link } from 'react-router-dom';
 
 import axios from 'axios';
+import './profile-view.scss';
 //////////////////////////////////////////////////////////////////////
 
 export class ProfileView extends React.Component {
@@ -63,7 +64,7 @@ export class ProfileView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
+        alert('Movie is removed');
         this.componentDidMount();
       });
   }
@@ -139,19 +140,20 @@ export class ProfileView extends React.Component {
                     Delete Account
                   </Button>
                 </Card.Body>
-                <Card.Body style={{ marginLeft: '100px' }}>
+                <Card.Body className="profileCardBody">
                   <span style={{ textAlign: 'center' }}>
                     My Favorite Movies:
                   </span>
                   {favoriteMovieList.map((movie) => {
                     return (
-                      <div key={movie._id}>
+                      <div className="profileImg" key={movie._id}>
                         <Card.Img
                           style={{ width: '40%', height: '40%' }}
                           variant="top"
                           src={movie.ImagePath}
                         />
                         <Button
+                          className="profileBtn"
                           style={{
                             backgroundColor: 'gray',
                             border: 'none',
@@ -160,7 +162,7 @@ export class ProfileView extends React.Component {
                           size="sm"
                           onClick={() => this.removeFavorite(movie)}
                         >
-                          Remove from Favorites
+                          Remove
                         </Button>
                       </div>
                     );
@@ -176,5 +178,16 @@ export class ProfileView extends React.Component {
 }
 
 ProfileView.propTypes = {
-  movies: PropTypes.array.isRequired,
+  user: propTypes.shape({
+    FavoriteMovies: propTypes.arrayOf(
+      propTypes.shape({
+        _id: propTypes.string.isRequired,
+        Title: propTypes.string.isRequired,
+      })
+    ),
+    Username: propTypes.string.isRequired,
+    Email: propTypes.string.isRequired,
+    Birthday: propTypes.instanceOf(Date),
+  }),
 };
+

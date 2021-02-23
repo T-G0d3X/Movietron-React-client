@@ -1,8 +1,12 @@
 // HIGH-LEVEL component - SUPERVISE OTHER components
 import React from 'react';
 import axios from 'axios';
+
+import { connect } from 'react-redux';
+import { setMovies } from '../../actions/actions';
+
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Nav from 'react-bootstrap/Nav';
+import { Navbar, Form, Nav } from 'react-bootstrap';
 import './main-view.scss';
 
 import { LoginView } from '../login-view/login-view';
@@ -13,15 +17,20 @@ import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import { ProfileView } from '../profile-view/profile-view';
 import { ProfileUpdate } from '../update-view/update-view';
+import { Link } from 'react-router-dom';
+
+import './main-view.scss';
+
+import MoviesList from '../movies-list/movies-list';
+import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
 
 //////////////////////////////////////////////////////////////////////
 
 export class MainView extends React.Component {
   constructor() {
     super();
-    // initial state is set to null
+
     this.state = {
-      movies: [],
       user: null,
     };
   }
@@ -37,7 +46,6 @@ export class MainView extends React.Component {
   }
 
   onLoggedIn(authData) {
-    console.log(authData);
     this.setState({
       user: authData.user.Username,
     });
@@ -54,9 +62,7 @@ export class MainView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        this.setState({
-          movies: response.data,
-        });
+        this.props.setMovies(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -71,47 +77,91 @@ export class MainView extends React.Component {
   }
 
   render() {
-    const { movies, user } = this.state;
-    const { movie } = this.props;
-
-    // Before the movies loaded
-    if (!movies) return <div className="main-view" />;
+    let { movies, visibilityFilter, movie } = this.props;
+    let { user } = this.state;
 
     //////////////////////////////////////////////////////////////////////////
     return (
       <Router>
-        <Nav as="ul">
-          <Nav.Item as="li">
-            <Nav.Link
-              href="/"
-              style={{
-                fontSize: '2em',
-                color: 'darkblue',
-                fontWeight: 'bold',
-                fontFamily: 'Franklin Gothic Medium',
-                letterSpacing: '13px',
-              }}
-            >
-              MOVIETRON
-            </Nav.Link>
-            <Nav.Link
-              style={{ display: 'inline' }}
-              href="/users/userId"
-              eventKey="link-1"
-            >
-              <h5 style={{ display: 'inline' }}>My Profile</h5>
-            </Nav.Link>
-            <Nav.Link style={{ display: 'inline' }}>
-              <h5
-                onClick={(user) => this.onSignOut(user)}
-                style={{ display: 'inline', marginLeft: '80px' }}
-              >
-                Log out
-              </h5>
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <div style={{ justifyContent: 'center' }} className="main-view row">
+        {user && (
+          <Navbar
+            style={{ backgroundColor: 'white' }}
+            variant="dark"
+            expand="md"
+            sticky="top"
+          >
+            <Navbar.Toggle
+              style={{ backgroundColor: 'burlywood', alignItems: 'center' }}
+              aria-controls="basic-navbar-nav"
+            />
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="mr-auto">
+                {user && (
+                  <Nav.Item>
+                    <Nav.Link
+                      className="navLinkHome"
+                      as={Link}
+                      to={`/`}
+                      target="_self"
+                      style={{
+                        color: 'burlywood',
+                        fontWeight: 'bold',
+                        letterSpacing: '10px',
+                        margin: 'auto',
+                      }}
+                    >
+                      MOVIETRON
+                    </Nav.Link>
+                  </Nav.Item>
+                )}
+              </Nav>
+              {user && (
+                <Nav.Item>
+                  <Nav.Link
+                    className="navLink"
+                    as={Link}
+                    to={`/users/${user}`}
+                    target="_self"
+                    style={{
+                      color: 'burlywood',
+                    }}
+                  >
+                    Profile
+                  </Nav.Link>
+                </Nav.Item>
+              )}
+              {user && (
+                <Nav.Item>
+                  <Nav.Link
+                    className="navLink"
+                    as={Link}
+                    to={`/`}
+                    target="_self"
+                    onClick={(user) => this.onSignOut(user)}
+                    style={{
+                      color: 'burlywood',
+                    }}
+                  >
+                    Log Out
+                  </Nav.Link>
+                </Nav.Item>
+              )}
+
+              {user && (
+                <Form inline>
+                  <VisibilityFilterInput
+                    variant="outline-light"
+                    visibilityFilter={visibilityFilter}
+                    className="filter"
+                  />
+                </Form>
+              )}
+            </Navbar.Collapse>
+          </Navbar>
+        )}
+
+        {/* //////////////////////////////////////////////////////////////// */}
+        <div className="main-view" style={{ backgroundColor: 'burlywood' }}>
           <Route
             exact
             path="/"
@@ -121,9 +171,15 @@ export class MainView extends React.Component {
                   <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                 );
 
-              return movies.map((m) => <MovieCard key={m._id} movie={m} />);
+              return <MoviesList movies={movies} />;
             }}
           />
+          {/* ////////////////////////////////////////////////////////////// */}
+
+          <Route path="/register" render={() => <RegisterView />} />
+
+          {/* ///////////////////////////////////////////////////////////// */}
+
           <Route
             path="/movies/:movieId"
             render={({ match }) => (
@@ -134,7 +190,9 @@ export class MainView extends React.Component {
               />
             )}
           />
-          <Route path="/register" render={() => <RegisterView />} />
+
+          {/* ////////////////////////////////////////////////////////////// */}
+
           <Route
             path="/directors/:name"
             render={({ match }) => {
@@ -149,6 +207,9 @@ export class MainView extends React.Component {
               );
             }}
           />
+
+          {/* //////////////////////////////////////////////////////////// */}
+
           <Route
             path="/genres/:name"
             render={({ match }) => {
@@ -163,20 +224,34 @@ export class MainView extends React.Component {
               );
             }}
           />
+
+          {/* ////////////////////////////////////////////////////////////// */}
+
           <Route
             path="/users/:userId"
             render={() => {
               return <ProfileView movies={movies} movie={movie} />;
             }}
           />
+
+          {/* ////////////////////////////////////////////////////////////// */}
+
           <Route
             path="/update/:userId"
             render={() => {
               return <ProfileUpdate />;
             }}
           />
+
+          {/* ////////////////////////////////////////////////////////////// */}
         </div>
       </Router>
     );
   }
 }
+
+let mapStateToProps = (state) => {
+  return { movies: state.movies };
+};
+
+export default connect(mapStateToProps, { setMovies })(MainView);
