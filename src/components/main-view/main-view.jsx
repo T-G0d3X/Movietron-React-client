@@ -88,7 +88,6 @@ export class MainView extends React.Component {
             style={{ backgroundColor: 'white' }}
             variant="dark"
             expand="md"
-            sticky="top"
           >
             <Navbar.Toggle
               style={{ backgroundColor: 'burlywood', alignItems: 'center' }}
