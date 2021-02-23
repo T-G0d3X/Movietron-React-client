@@ -1,8 +1,12 @@
-ul.nav {
-  justify-content: center;
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  resize: inherit;
-  margin: auto;
-  width: inherit;
+.container-fluid {
+  height: 100vh;
+}
+
+a.navLinkHome.nav-link {
+  @media (max-width: 425px) {
+    font-size: 30px;
+  }
+  @media (min-width: 425px) {
+    font-size: 50px;
+  }
 }

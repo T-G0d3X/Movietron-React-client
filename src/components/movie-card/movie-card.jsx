@@ -1,6 +1,6 @@
 // Low level REUSABLE COMPONENT- have a small well defined concern
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ export class MovieCard extends React.Component {
           marginRight: '25px',
           justifyContent: 'center',
           border: 'solid 1px skyblue',
+          marginTop: '20px',
         }}
         className="card-deck"
       >
@@ -34,8 +35,11 @@ export class MovieCard extends React.Component {
             <span className="label">{movie.Description}</span>
           </Card.Text>
         </Card.Body>
-        <Link to={`/movies/${movie._id}`}>
-          <Button style={{ marginBottom: '10px' }} variant="primary">
+        <Link style={{ textAlign: 'center' }} to={`/movies/${movie._id}`}>
+          <Button
+            style={{ marginBottom: '10px', width: '230px' }}
+            variant="primary"
+          >
             Open
           </Button>
         </Link>
@@ -45,18 +49,19 @@ export class MovieCard extends React.Component {
 }
 
 MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    Description: PropTypes.string.isRequired,
-    ImagePath: PropTypes.string.isRequired,
-    Genre: PropTypes.shape({
-      Name: PropTypes.string.isRequired,
-      Description: PropTypes.string.isRequired,
+  movie: propTypes.shape({
+    Title: propTypes.string.isRequired,
+    Description: propTypes.string,
+    ImagePath: propTypes.string.isRequired,
+    Genre: propTypes.shape({
+      Name: propTypes.string,
+      Biography: propTypes.string,
     }),
-    Director: PropTypes.shape({
-      Name: PropTypes.string.isRequired,
-      Bio: PropTypes.string.isRequired,
-      Birth: PropTypes.string.isRequired,
+    Director: propTypes.shape({
+      Name: propTypes.string,
+      Bio: propTypes.string,
+      Birth: propTypes.string,
     }),
+    Featured: propTypes.bool,
   }).isRequired,
 };

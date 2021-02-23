@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Form, Button } from 'react-bootstrap';
+import propTypes from 'prop-types';
+import { Form, Button, Container } from 'react-bootstrap';
 import '../registration-view/registration-view.scss';
 import axios from 'axios';
 
+import './registration-view.scss';
 import { Link } from 'react-router-dom';
 //////////////////////////////////////////////////////////////////////
 
@@ -30,76 +31,104 @@ export function RegisterView(props) {
         window.open('/', '_self'); // _self so the page opens in current tab
       })
       .catch((e) => {
-        console.log('error registering the user');
+        alert('error registering the user');
       });
   };
 
   ////////////////////////////////////////////////////////////////
   return (
-    <Form style={{ marginTop: '50px' }}>
-      <p>Register for nice list of movies</p>
+    <Container>
+      <h1
+        style={{
+          textAlign: 'center',
+          fontFamily: 'cursive',
+          fontWeight: 'bold',
+          letterSpacing: '1em',
+          paddingTop: '50px',
+        }}
+      >
+        MOVIETRON
+      </h1>
+      <Form
+        style={{
+          marginTop: '60px',
+          border: '1px solid white',
+          padding: '20px',
+          backgroundColor: 'navajowhite',
+          paddingTop: '50px',
+        }}
+        className="regForm"
+      >
+        <p>Register for nice list of movies</p>
 
-      <Form.Group controlId="formBasicText">
-        <Form.Label>Username</Form.Label>
-        <Form.Control
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Enter Username"
-        />
-      </Form.Group>
+        <Form.Group controlId="formBasicText">
+          <Form.Control
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter Username"
+          />
+        </Form.Group>
 
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter email"
-        />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
+        <Form.Group controlId="formBasicEmail">
+          <Form.Control
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter email"
+          />
+          <Form.Text className="text-muted">
+            We'll never share your email with anyone else.
+          </Form.Text>
+        </Form.Group>
 
-      <Form.Group controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-      </Form.Group>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Control
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+          />
+        </Form.Group>
 
-      <Form.Group controlId="fromBasicBirthday">
-        <Form.Label>Enter your birthday</Form.Label>
-        <Form.Control
-          type="date"
-          value={birthday}
-          onChange={(e) => setBirthday(e.target.value)}
-          placeholder="Enter Birthday"
-        ></Form.Control>
-      </Form.Group>
+        <Form.Group controlId="fromBasicBirthday">
+          <Form.Label>Enter your birthday</Form.Label>
+          <Form.Control
+            type="date"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
+            placeholder="Enter Birthday"
+          ></Form.Control>
+        </Form.Group>
 
-      <Button onClick={handleRegister} variant="primary" type="submit">
-        Submit
-      </Button>
-      <Link to="/">
-        <Button type="submit" variant="primary" style={{ marginLeft: '10px' }}>
-          Already have an account?
+        <Button onClick={handleRegister} variant="primary" type="submit">
+          Submit
         </Button>
-      </Link>
-    </Form>
+        <Link to="/">
+          <Button
+            className="regBtn"
+            type="submit"
+            variant="primary"
+            style={{
+              marginLeft: '10px',
+              backgroundColor: '#333',
+              border: 'none',
+            }}
+          >
+            Already have an account?
+          </Button>
+        </Link>
+      </Form>
+    </Container>
   );
 }
 
 RegisterView.propTypes = {
-  register: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
+  register: propTypes.shape({
+    Username: propTypes.string.isRequired,
+    Email: propTypes.string.isRequired,
+    Password: propTypes.string.isRequired,
+    Birthday: propTypes.string.isRequired,
   }),
-  onClick: PropTypes.func,
-  onChange: PropTypes.func,
+  onRegister: propTypes.func,
 };

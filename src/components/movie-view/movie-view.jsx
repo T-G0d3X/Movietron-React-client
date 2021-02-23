@@ -1,8 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './movie-view.scss';
 //////////////////////////////////////////////////////////////////////
 
 export class MovieView extends React.Component {
@@ -28,7 +29,7 @@ export class MovieView extends React.Component {
         window.open('/users/' + localStorage.getItem('user'), '_self');
       })
       .catch((error) => {
-        console.log('Error Adding movie to favorites.');
+        alert('Error Adding movie to favorites.');
       });
   }
 
@@ -40,7 +41,13 @@ export class MovieView extends React.Component {
     ///////////////////////////////////////////////////////////////////////////
     return (
       <div className="movie-view">
-        <Card style={{ width: '18rem', border: 'solid 1px skyblue' }}>
+        <Card
+          style={{
+            width: '18rem',
+            border: 'solid 1px skyblue',
+            marginTop: '30px',
+          }}
+        >
           <Card.Img
             className="movie-poster"
             variant="top"
@@ -88,3 +95,25 @@ export class MovieView extends React.Component {
     );
   }
 }
+
+MovieView.propTypes = {
+  // shape({...}) means it expects an object
+  movie: propTypes.shape({
+    // movie prop may contain Title, and IF it does, it must be a string
+    Title: propTypes.string.isRequired,
+    Description: propTypes.string,
+    ImagePath: propTypes.string.isRequired,
+    Genre: propTypes.shape({
+      Name: propTypes.string,
+    }),
+    Director: propTypes.shape({
+      Name: propTypes.string,
+      Bio: propTypes.string,
+      Birth: propTypes.string,
+    }),
+    Featured: propTypes.bool,
+  }),
+  user: propTypes.shape({
+    Username: propTypes.string,
+  }),
+};

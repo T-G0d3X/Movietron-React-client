@@ -1,1 +1,20 @@
+.logBtn {
+  @media (max-width: 394px) {
+    margin-top: 10px;
+  }
+}
 
+form.logForm {
+  @media (max-width: 350px) {
+    text-align: center;
+  }
+
+  @media (max-width: 500px) {
+    text-align: center;
+  }
+}
+
+button.btn.btn-primary {
+  background-color: black;
+  border: none;
+}
