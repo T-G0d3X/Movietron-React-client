@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { MovieCard } from '../movie-card/movie-card';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Container } from 'react-bootstrap';
 import './movies-list.scss';
 
 import VisibilityFilterInput from '../visibility-filter-input/visibility-filter-input';
@@ -23,11 +23,13 @@ function MoviesList(props) {
   if (!movies) return <div className="main-view" />;
 
   return (
-    <Row className="movies-list">
-      {filteredMovies.map((m) => (
-        <MovieCard key={m._id} movie={m} />
-      ))}
-    </Row>
+    <Container>
+      <Row className="movies-list">
+        {filteredMovies.map((m) => (
+          <MovieCard key={m._id} movie={m} />
+        ))}
+      </Row>
+    </Container>
   );
 }
 
