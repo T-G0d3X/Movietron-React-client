@@ -31,7 +31,17 @@ export function RegisterView(props) {
         window.open('/', '_self'); // _self so the page opens in current tab
       })
       .catch((e) => {
-        alert('error registering the user');
+        if (username === '' || username === null) {
+          alert('Username is required');
+        } else if (username.length < 5) {
+          alert('Username needs to be longer then 5 letters');
+        } else if (password === '' || password === null) {
+          alert('Password is required');
+        } else if (email.indexOf('@') === -1) {
+          alert('You need a valid email adress');
+        } else if (birthday === '') {
+          alert('enter your birthday');
+        }
       });
   };
 
@@ -67,6 +77,7 @@ export function RegisterView(props) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter Username"
+            required
           />
         </Form.Group>
 
@@ -76,6 +87,7 @@ export function RegisterView(props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter email"
+            required
           />
           <Form.Text className="text-muted">
             We'll never share your email with anyone else.
@@ -88,6 +100,7 @@ export function RegisterView(props) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
+            required
           />
         </Form.Group>
 
@@ -98,6 +111,7 @@ export function RegisterView(props) {
             value={birthday}
             onChange={(e) => setBirthday(e.target.value)}
             placeholder="Enter Birthday"
+            required
           ></Form.Control>
         </Form.Group>
 
@@ -132,4 +146,3 @@ RegisterView.propTypes = {
   }),
   onRegister: propTypes.func,
 };
-

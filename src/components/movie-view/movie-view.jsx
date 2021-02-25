@@ -25,8 +25,7 @@ export class MovieView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        console.log(response);
-        window.open('/users/' + localStorage.getItem('user'), '_self');
+        alert('Movie is added to favourites');
       })
       .catch((error) => {
         alert('Error Adding movie to favorites.');

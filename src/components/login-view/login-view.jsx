@@ -25,7 +25,15 @@ export function LoginView(props) {
         props.onLoggedIn(data);
       })
       .catch((e) => {
-        alert('no such user');
+        if (username === '' || username === null) {
+          alert('Username is required');
+        } else if (username.length < 5) {
+          alert('Username needs to be longer then 5 letters');
+        } else if (password === '' || password === null) {
+          alert('Password is required');
+        } else if (username !== username.data) {
+          alert('Wrong username or password');
+        }
       });
   };
 
