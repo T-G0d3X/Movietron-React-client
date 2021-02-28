@@ -25,7 +25,7 @@ export class DirectorView extends React.Component {
 
     //////////////////////////////////////////////////////////////////////
     return (
-      <Container className="directorContainer">
+      <Container>
         <Card
           className="text-center"
           style={{ border: '1px solid skyblue', marginTop: '30px' }}
