@@ -15,10 +15,10 @@ export class MovieCard extends React.Component {
       <Card
         style={{
           width: '16rem',
-          marginRight: '25px',
           justifyContent: 'center',
           border: 'solid 1px skyblue',
           marginTop: '20px',
+          marginLeft: '10px',
         }}
         className="card-deck"
       >

@@ -25,27 +25,25 @@ export class GenreView extends React.Component {
     //////////////////////////////////////////////////////////////////////////
     return (
       <Container className="wrapper container-fluid">
-        <Row>
-          <Card
-            className="text-center"
-            style={{ border: '1px solid skyblue', marginTop: '30px' }}
-          >
-            <Card.Title style={{ marginTop: '10px', fontSize: '2em' }}>
-              {genre.Genre.Name}
-            </Card.Title>
-            <Card.Body>{genre.Genre.Description}</Card.Body>
-          </Card>
-        </Row>
-        <Container>
-          <h4 className="mt-4">Some {genre.Genre.Name} movies</h4>
-          <div className="d-flex row mt-3 ml-2">
-            {movies.map((movie) => {
-              if (movie.Genre.Name === genre.Genre.Name) {
-                return <MovieCard key={movie._id} movie={movie} />;
-              }
-            })}
-          </div>
-        </Container>
+        <Card
+          className="text-center"
+          style={{ border: '1px solid skyblue', marginTop: '30px' }}
+        >
+          <Card.Title style={{ marginTop: '10px', fontSize: '2em' }}>
+            {genre.Genre.Name}
+          </Card.Title>
+          <Card.Body>{genre.Genre.Description}</Card.Body>
+        </Card>
+        <h4 style={{ textAlign: 'center', marginTop: '10px' }}>
+          Some {genre.Genre.Name} movies
+        </h4>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          {movies.map((movie) => {
+            if (movie.Genre.Name === genre.Genre.Name) {
+              return <MovieCard key={movie._id} movie={movie} />;
+            }
+          })}
+        </div>
       </Container>
     );
   }

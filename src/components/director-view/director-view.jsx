@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Card from 'react-bootstrap/Card';
 import { MovieCard } from '../movie-card/movie-card';
+import './director-view.scss';
 ////////////////////////////////////////////////////////////////////////
 
 export class DirectorView extends React.Component {
@@ -24,7 +25,7 @@ export class DirectorView extends React.Component {
 
     //////////////////////////////////////////////////////////////////////
     return (
-      <Container>
+      <Container className="directorContainer">
         <Card
           className="text-center"
           style={{ border: '1px solid skyblue', marginTop: '30px' }}
@@ -44,14 +45,12 @@ export class DirectorView extends React.Component {
             </Card.Text>
           </Card.Body>
         </Card>
-        <h4>{director.Director.Name} movies</h4>
-        <div className="d-flex row mt-3 ml-1">
-          {movies.map((movie) => {
-            if (movie.Director.Name === director.Director.Name) {
-              return <MovieCard key={movie._id} movie={movie} />;
-            }
-          })}
-        </div>
+        <h4 style={{ marginTop: '20px' }}>{director.Director.Name} movies</h4>
+        {movies.map((movie) => {
+          if (movie.Director.Name === director.Director.Name) {
+            return <MovieCard key={movie._id} movie={movie} />;
+          }
+        })}
       </Container>
     );
   }
